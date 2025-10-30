@@ -1,0 +1,29 @@
+{
+  "tests": [
+    {
+      "name": "Test OPTIONS request",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200
+    },
+    {
+      "name": "Test POST without message",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "energy": 100
+      },
+      "expectedStatus": 400
+    },
+    {
+      "name": "Test POST with low energy",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "message": "test",
+        "energy": 5
+      },
+      "expectedStatus": 429
+    }
+  ]
+}

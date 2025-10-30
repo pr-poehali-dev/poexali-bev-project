@@ -1,12 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
 
+const AiChat = lazy(() => import('@/components/AiChat'));
+
 const Index = () => {
   const [energy, setEnergy] = useState(99999);
   const [activeSection, setActiveSection] = useState('home');
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const features = [
     {
@@ -58,9 +61,7 @@ const Index = () => {
   ];
 
   const handleInteraction = () => {
-    if (energy > 0) {
-      setEnergy(prev => Math.max(0, prev - 1));
-    }
+    setIsChatOpen(true);
   };
 
   useEffect(() => {
@@ -118,6 +119,7 @@ const Index = () => {
               </span>
             </div>
             <Button onClick={handleInteraction} className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity">
+              <Icon name="MessageCircle" size={18} className="mr-2" />
               Начать
             </Button>
           </div>
@@ -340,6 +342,16 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      {isChatOpen && (
+        <Suspense fallback={null}>
+          <AiChat
+            energy={energy}
+            onEnergyUpdate={setEnergy}
+            onClose={() => setIsChatOpen(false)}
+          />
+        </Suspense>
+      )}
     </div>
   );
 };
